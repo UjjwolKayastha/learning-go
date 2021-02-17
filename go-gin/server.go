@@ -1,8 +1,12 @@
 package main
 
 import (
+	"io"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/ujjwolkayastha/go-gin/controllers"
+	"github.com/ujjwolkayastha/go-gin/middlewares"
 	"github.com/ujjwolkayastha/go-gin/services"
 )
 
@@ -11,8 +15,16 @@ var (
 	videoController controllers.VideoController = controllers.New(videoService)
 )
 
+func setupLogOutput() {
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+}
+
 func main() {
-	server := gin.Default()
+	setupLogOutput()
+	server := gin.New()
+
+	server.Use(gin.Recovery(), middlewares.Logger())
 
 	server.GET("/health-check", func(c *gin.Context) {
 		c.JSON(200, gin.H{

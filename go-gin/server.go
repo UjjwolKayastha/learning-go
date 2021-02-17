@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	gindump "github.com/tpkeeper/gin-dump"
 	"github.com/ujjwolkayastha/go-gin/controllers"
 	"github.com/ujjwolkayastha/go-gin/middlewares"
 	"github.com/ujjwolkayastha/go-gin/services"
@@ -24,7 +25,7 @@ func main() {
 	setupLogOutput()
 	server := gin.New()
 
-	server.Use(gin.Recovery(), middlewares.Logger())
+	server.Use(gin.Recovery(), middlewares.Logger(), middlewares.Auth(), gindump.Dump())
 
 	server.GET("/health-check", func(c *gin.Context) {
 		c.JSON(200, gin.H{

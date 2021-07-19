@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"hotels-api/api/responses"
 	"hotels-api/api/services"
 	"hotels-api/infrastructure"
@@ -77,5 +78,33 @@ func (h HotelController) HandleGetOneHotel() gin.HandlerFunc {
 		}
 
 		responses.JSON(c, http.StatusOK, hotel)
+	}
+}
+
+func (h HotelController) HandleUpdateHotel() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		hotelID := c.Param("hotelID")
+		hotel := models.Hotel{}
+
+		fmt.Println("FROM CONT", hotelID, hotel)
+
+		if err := h.service.GetOneHotel(&hotel, hotelID); err != nil {
+			h.logger.Error("error getting hotel ", err)
+			responses.ErrorJSON(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		if err := c.ShouldBindJSON(&hotel); err != nil {
+			responses.ErrorJSON(c, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		if err := h.service.UpdateHotel(hotelID, &hotel); err != nil {
+			h.logger.Error("error updaing hotel", err)
+			responses.ErrorJSON(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		responses.JSON(c, http.StatusOK, "hotel updated")
 	}
 }

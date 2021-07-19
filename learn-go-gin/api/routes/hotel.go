@@ -33,6 +33,7 @@ func (h HotelRoutes) Setup() {
 		hotel.POST("", h.controller.HandleCreateHotel())
 		hotel.GET("", h.controller.HandleGetAllHotels())
 		hotel.PUT("/:hotelID", h.controller.HandleUpdateHotel())
+		hotel.DELETE("/:hotelID", h.controller.HandleDeleteHotel())
 	}
 	h.router.GET("/hotel/:hotelID", h.controller.HandleGetOneHotel())
 }

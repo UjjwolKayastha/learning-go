@@ -108,3 +108,19 @@ func (h HotelController) HandleUpdateHotel() gin.HandlerFunc {
 		responses.JSON(c, http.StatusOK, "hotel updated")
 	}
 }
+
+func (h HotelController) HandleDeleteHotel() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		hotelID := c.Param("hotelID")
+		hotel := models.Hotel{}
+
+		if err := h.service.DeleteOneHotel(&hotel, hotelID); err != nil {
+			h.logger.Error("error getting hotel ", err)
+			responses.ErrorJSON(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		responses.SuccessJSON(c, http.StatusOK, "deleted hotel")
+	}
+}

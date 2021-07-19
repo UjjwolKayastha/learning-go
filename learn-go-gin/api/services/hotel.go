@@ -30,3 +30,7 @@ func (h HotelService) GetAllHotels() ([]models.Hotel, int64, error) {
 func (h HotelService) UpdateHotel(id string, hotel *models.Hotel) error {
 	return h.repo.UpdateOne(id, hotel)
 }
+
+func (h HotelService) DeleteOneHotel(hotel *models.Hotel, id string) error {
+	return h.repo.Delete(id)
+}

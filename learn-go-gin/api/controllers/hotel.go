@@ -48,3 +48,34 @@ func (h HotelController) HandleCreateHotel() gin.HandlerFunc {
 
 	}
 }
+
+// HandleGetAllHotels get all hotels
+func (h HotelController) HandleGetAllHotels() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		hotels, count, err := h.service.GetAllHotels()
+		if err != nil {
+			h.logger.Error("error getting hotels ", err)
+			responses.ErrorJSON(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		responses.JSONCount(c, http.StatusOK, hotels, int(count))
+	}
+}
+
+// HandleGetOneHotel get one hotel
+func (h HotelController) HandleGetOneHotel() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		hotelID := c.Param("hotelID")
+		hotel := models.Hotel{}
+
+		if err := h.service.GetOneHotel(&hotel, hotelID); err != nil {
+			h.logger.Error("error getting hotel ", err)
+			responses.ErrorJSON(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		responses.JSON(c, http.StatusOK, hotel)
+	}
+}

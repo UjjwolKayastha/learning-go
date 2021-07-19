@@ -18,3 +18,11 @@ func NewHotelService(repo repositories.HotelRepository) HotelService {
 func (h HotelService) CreateHotel(hotel *models.Hotel) error {
 	return h.repo.Create(hotel)
 }
+
+func (h HotelService) GetOneHotel(hotel *models.Hotel, id string) error {
+	return h.repo.GetOne(hotel, id)
+}
+
+func (h HotelService) GetAllHotels() ([]models.Hotel, int64, error) {
+	return h.repo.GetAll()
+}

@@ -18,11 +18,6 @@ func NewHotelRepository(
 	}
 }
 
-// GetOne gets one hotel
-func (b HotelRepository) GetOne(m *models.Hotel, id string) (err error) {
-	return b.db.Where("id = ? ", id).First(m).Error
-}
-
 // Delete deletes the row of data
 func (b HotelRepository) Delete(id, ownerID string) error {
 	return b.db.Where("id = ? AND owner_id = ?", id, ownerID).Delete(&models.Hotel{}).Error

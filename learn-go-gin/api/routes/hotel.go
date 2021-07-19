@@ -31,6 +31,7 @@ func (h HotelRoutes) Setup() {
 	hotel := h.router.Group("/hotel")
 	{
 		hotel.POST("", h.controller.HandleCreateHotel())
+		hotel.GET("", h.controller.HandleGetAllHotels())
 	}
-
+	h.router.GET("/hotel/:hotelID", h.controller.HandleGetOneHotel())
 }
